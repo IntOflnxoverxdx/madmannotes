@@ -1,3 +1,7 @@
+if (getCookie("token")!=="" && window.location.href.split("/").reverse()[0] != "index.html"){
+    window.location.href = "index.html"
+}
+
 let auth_option = 0 //0 - логин 1 - регистрация
 document.querySelector("#login-option").onclick = ()=>{
     auth_option = 0

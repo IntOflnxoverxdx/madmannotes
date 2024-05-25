@@ -6,12 +6,68 @@ document.querySelector("#add-task-btn").onclick = ()=>{
     document.querySelector(".add-task__wrapper").style = "display:block;"
 }
 
-
+function addtask(name,deadline,status){
+    console.log(deadline);
+    deadline = new Date(deadline)
+    days = (deadline - new Date(today.split(".").reverse().join("-")))/86400000
+    code =
+    `
+    <div class="task">
+        <div class="task__name">
+            ${name}
+        </div>
+        ${status == "active" && days>=0?`
+        <div class="task__deadline">
+            До: ${deadline.toLocaleString("ru-RU").split(",")[0]}
+        </div>
+        <div class="task__actions">
+            <img src="img/icons/reject.svg" alt="" class="action__reject">
+            <img src="img/icons/done.svg" alt="" class="action__done">
+        </div>`:`
+        <div class="task__actions">
+            <img src="img/icons/delete.svg" alt="" class="action__delete">
+        </div>`}
+    </div>
+    `
+    if (status == "active"){
+        if (days < 0){
+            document.querySelector(".rejected .to-do__content").innerHTML += code
+            fetch(server+"setstatus",{
+                method:"post",
+                headers:{
+                    "Content-type":"application/json"
+                },
+                body:JSON.stringify({
+                    "name":name,
+                    "status":"rejected",
+                    "token":getCookie("token")
+                })
+            }).then(r=>r.json())
+            .then(data=>{
+                console.log(data);
+            })
+        }else if (days <= 2){
+            document.querySelector(".quickly .to-do__content").innerHTML += code
+        }else if (days <= 7){
+            document.querySelector(".soon .to-do__content").innerHTML += code
+        }else{
+            document.querySelector(".later .to-do__content").innerHTML += code
+        }
+    }else if (status=="done"){
+        document.querySelector(".done .to-do__content").innerHTML += code
+    }
+    else{
+        document.querySelector(".rejected .to-do__content").innerHTML += code
+    }
+}
 
 
 document.querySelector("#send-task-btn").onclick = ()=>{
     taskname = document.querySelector("#task-name").value
     deadline = document.querySelector("#deadline-input").value
+    document.querySelector("#task-name").value = ""
+    document.querySelector("#deadline-input").value = ''
+    document.querySelector(".add-task__wrapper").style = "display:none;"
     if (taskname == ""){
         alert("У задачи должно быть название")
     } else if (deadline == ""){
@@ -32,7 +88,7 @@ document.querySelector("#send-task-btn").onclick = ()=>{
             if (!data.success){
                 alert(data.message)
             }else{
-                window.location.reload()
+                addtask(taskname,deadline,"active")
             }
         })
     }
@@ -52,59 +108,7 @@ fetch(server+"gettasks",{
 .then(data=>{
 
     data.tasks.forEach(task => {
-        name = task.name
-        deadline = new Date(task.deadline)
-        status = task.status
-        days = (deadline - new Date(today.split(".").reverse().join("-")))/86400000
-        code =
-        `
-        <div class="task">
-            <div class="task__name">
-                ${name}
-            </div>
-            ${status == "active" && days>=0?`
-            <div class="task__deadline">
-                До: ${deadline.toLocaleString("ru-RU").split(",")[0]}
-            </div>
-            <div class="task__actions">
-                <img src="img/icons/reject.svg" alt="" class="action__reject">
-                <img src="img/icons/done.svg" alt="" class="action__done">
-            </div>`:`
-            <div class="task__actions">
-                <img src="img/icons/delete.svg" alt="" class="action__delete">
-            </div>`}
-        </div>
-        `
-        if (status == "active"){
-            if (days < 0){
-                document.querySelector(".rejected .to-do__content").innerHTML += code
-                fetch(server+"setstatus",{
-                    method:"post",
-                    headers:{
-                        "Content-type":"application/json"
-                    },
-                    body:JSON.stringify({
-                        "name":name,
-                        "status":"rejected",
-                        "token":getCookie("token")
-                    })
-                }).then(r=>r.json())
-                .then(data=>{
-                    console.log(data);
-                })
-            }else if (days <= 2){
-                document.querySelector(".quickly .to-do__content").innerHTML += code
-            }else if (days <= 7){
-                document.querySelector(".soon .to-do__content").innerHTML += code
-            }else{
-                document.querySelector(".later .to-do__content").innerHTML += code
-            }
-        }else if (status=="done"){
-            document.querySelector(".done .to-do__content").innerHTML += code
-        }
-        else{
-            document.querySelector(".rejected .to-do__content").innerHTML += code
-        }
+        addtask(task.name,task.deadline,task.status)
     });
     document.querySelectorAll(".action__reject").forEach(button => {
         button.onclick = ()=>{
@@ -121,6 +125,8 @@ fetch(server+"gettasks",{
                 })
             }).then(r=>r.json())
             .then(data=>{
+                el = button.parentElement.parentElement
+                document.querySelector(".rejected").querySelector(".to-do__content").appendChild(el);
             })
         }
     });
@@ -139,6 +145,8 @@ fetch(server+"gettasks",{
                 })
             }).then(r=>r.json())
             .then(data=>{
+                el = button.parentElement.parentElement
+                document.querySelector(".done").querySelector(".to-do__content").appendChild(el);
             })
         }
     });
@@ -157,6 +165,7 @@ fetch(server+"gettasks",{
                 })
             }).then(r=>r.json())
             .then(data=>{
+                button.parentElement.parentElement.remove()
             })
         }
     });

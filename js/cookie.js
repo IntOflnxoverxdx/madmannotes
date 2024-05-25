@@ -4,8 +4,6 @@ if (getCookie("token")=="" && window.location.href.split("/").reverse()[0] != "a
     window.location.href = "auth.html"
 }
 
-eraseCookie("fvdgdgf")
-
 function setCookie(name,value,days) {
     let expires = "";
     if (days) {
