@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/cookie.js" defer></script>
+    <script src="js/date.js" defer></script>
+    <script src="js/list.js" defer></script>
+    <script src="js/add-task.js" defer></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="img/icons/logo.svg" alt="">
+            </div>
+            <div class="date"></div>
+            <div class="nickname">
+                <div id="nickname-text">null</div>
+                <img src="img/icons/logout.svg" alt="" id="logout">
+            </div>
+        </div>
+    </header>
+    <div class="add-task__wrapper">
+        <div class="add-task__overlay"></div>
+        <div class="add-task__modal">
+            <label for="task-name">Название задачи</label>
+            <input id="task-name" type="text" placeholder="Посадить сына">
+            <label for="deadline-input">Дедлайн</label>
+            <input id="deadline-input" type="date">
+            <button class="btn" id="send-task-btn">Добавить</button>
+        </div>
+    </div>
+    <main>
+        <div class="container">
+            <div id="add-task-btn">+</div>
+            <div class="to-do">
+                <div class="quickly to-do__item">
+                    <div class="to-do__top">
+                        <h2>Срочно</h2>
+                        <img class="shide-btn" data-open="0" src="img/icons/arrow.svg" alt="">
+                    </div>
+                    <div class="to-do__content__wrapper">
+                        <div class="to-do__content">
+                        </div>
+                    </div>
+                </div>
+                <div class="soon to-do__item">
+                    <div class="to-do__top">
+                        <h2>Скоро</h2>
+                        <img class="shide-btn"  data-open="0" src="img/icons/arrow.svg" alt="">
+                    </div>
+                    <div class="to-do__content__wrapper">
+                        <div class="to-do__content">
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="later to-do__item">
+                    <div class="to-do__top">
+                        <h2>Потом</h2>
+                        <img class="shide-btn"  data-open="0" src="img/icons/arrow.svg" alt="">
+                    </div>
+                    <div class="to-do__content__wrapper">
+                        <div class="to-do__content">                       
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="late">
+                <div class="done to-do__item">
+                    <div class="to-do__top">
+                        <h2>Выполнено</h2>
+                        <img class="shide-btn" data-open="0" src="img/icons/arrow.svg" alt="">
+                    </div>
+                    <div class="to-do__content__wrapper">
+                        <div class="to-do__content">
+                        </div>
+                    </div>
+                </div>
+                <div class="rejected to-do__item">
+                    <div class="to-do__top">
+                        <h2>Не выполнено</h2>
+                        <img class="shide-btn"  data-open="0" src="img/icons/arrow.svg" alt="">
+                    </div>
+                    <div class="to-do__content__wrapper">
+                        <div class="to-do__content">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
