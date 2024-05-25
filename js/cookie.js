@@ -1,4 +1,4 @@
-const server = "http://127.0.0.1:8000/"
+const server = "https://e4f6c5df-5618-4cc1-9d39-3af2983b2a15-00-1rbh7q98gl145.picard.replit.dev/"
 
 if (getCookie("token")=="" && window.location.href.split("/").reverse()[0] != "auth.html"){
     window.location.href = "auth.html"
