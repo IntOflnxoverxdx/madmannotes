@@ -36,7 +36,7 @@ function setOption(){
         <input id="password-input" type="password" placeholder="••••••••">
         <label for="">Подтверждение пароля</label>
         <input id="passwordconfirm-input" type="password" placeholder="••••••••">
-        <button class="btn" id="register-btn">Региистрация</button>
+        <button class="btn" id="register-btn">Регистрация</button>
         `
         document.querySelector("#register-btn").onclick = () =>{
             email = document.querySelector("#email-input").value

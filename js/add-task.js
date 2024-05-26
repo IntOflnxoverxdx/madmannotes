@@ -6,14 +6,14 @@ document.querySelector("#add-task-btn").onclick = ()=>{
     document.querySelector(".add-task__wrapper").style = "display:block;"
 }
 
-function addtask(name,deadline,status){
+function addtask(name,deadline,status,id){
     console.log(deadline);
     deadline = new Date(deadline)
     days = (deadline - new Date(today.split(".").reverse().join("-")))/86400000
     code =
     `
     <div class="task">
-        <div class="task__name">
+        <div data-id="${id}" class="task__name">
             ${name}
         </div>
         ${status == "active" && days>=0?`
@@ -40,7 +40,8 @@ function addtask(name,deadline,status){
                 body:JSON.stringify({
                     "name":name,
                     "status":"rejected",
-                    "token":getCookie("token")
+                    "token":getCookie("token"),
+                    "id":parseInt(id)
                 })
             }).then(r=>r.json())
             .then(data=>{
@@ -59,6 +60,7 @@ function addtask(name,deadline,status){
     else{
         document.querySelector(".rejected .to-do__content").innerHTML += code
     }
+    buttons()
 }
 
 
@@ -88,28 +90,12 @@ document.querySelector("#send-task-btn").onclick = ()=>{
             if (!data.success){
                 alert(data.message)
             }else{
-                addtask(taskname,deadline,"active")
+                addtask(taskname,deadline,"active",data.id)
             }
         })
     }
 }
-
-
-
-fetch(server+"gettasks",{
-    method:"post",
-    headers:{
-        "Content-type":"application/json"
-    },
-    body:JSON.stringify({
-        "token":getCookie("token")
-    })
-}).then(r=>r.json())
-.then(data=>{
-
-    data.tasks.forEach(task => {
-        addtask(task.name,task.deadline,task.status)
-    });
+function buttons(){
     document.querySelectorAll(".action__reject").forEach(button => {
         button.onclick = ()=>{
             if (confirm(`Отказаться от выполнения задачи ${button.parentElement.parentElement.querySelector(".task__name").textContent.trim()}?`))
@@ -121,12 +107,16 @@ fetch(server+"gettasks",{
                 body:JSON.stringify({
                     "name":button.parentElement.parentElement.querySelector(".task__name").textContent.trim(),
                     "status":"rejected",
-                    "token":getCookie("token")
+                    "token":getCookie("token"),
+                    "id":parseInt(button.parentElement.parentElement.querySelector(".task__name").getAttribute("data-id"))
                 })
             }).then(r=>r.json())
             .then(data=>{
                 el = button.parentElement.parentElement
                 document.querySelector(".rejected").querySelector(".to-do__content").appendChild(el);
+                el.querySelector(".task__actions").innerHTML  = `<img src="img/icons/delete.svg" alt="" class="action__delete">`
+                el.querySelector(".task__deadline").remove()
+                buttons()
             })
         }
     });
@@ -141,12 +131,16 @@ fetch(server+"gettasks",{
                 body:JSON.stringify({
                     "name":button.parentElement.parentElement.querySelector(".task__name").textContent.trim(),
                     "status":"done",
-                    "token":getCookie("token")
+                    "token":getCookie("token"),
+                    "id":parseInt(button.parentElement.parentElement.querySelector(".task__name").getAttribute("data-id"))
                 })
             }).then(r=>r.json())
             .then(data=>{
                 el = button.parentElement.parentElement
                 document.querySelector(".done").querySelector(".to-do__content").appendChild(el);
+                el.querySelector(".task__actions").innerHTML  = `<img src="img/icons/delete.svg" alt="" class="action__delete">`
+                el.querySelector(".task__deadline").remove()
+                buttons()
             })
         }
     });
@@ -161,7 +155,8 @@ fetch(server+"gettasks",{
                 body:JSON.stringify({
                     "name":button.parentElement.parentElement.querySelector(".task__name").textContent.trim(),
                     "status":"done",
-                    "token":getCookie("token")
+                    "token":getCookie("token"),
+                    "id":parseInt(button.parentElement.parentElement.querySelector(".task__name").getAttribute("data-id"))
                 })
             }).then(r=>r.json())
             .then(data=>{
@@ -169,6 +164,24 @@ fetch(server+"gettasks",{
             })
         }
     });
+}
+
+
+fetch(server+"gettasks",{
+    method:"post",
+    headers:{
+        "Content-type":"application/json"
+    },
+    body:JSON.stringify({
+        "token":getCookie("token")
+    })
+}).then(r=>r.json())
+.then(data=>{
+
+    data.tasks.forEach(task => {
+        addtask(task.name,task.deadline,task.status,task.id)
+    });
+    //buttons()
 })
 
 interval = setInterval(() => {

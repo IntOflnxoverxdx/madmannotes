@@ -243,7 +243,7 @@ h2{
 #add-task-btn{
     user-select: none;
     font-size: 70px;
-    position: absolute;
+    position: fixed;
     right: 30px;
     bottom: 30px;
     cursor: pointer;
@@ -315,4 +315,60 @@ main .container{
 .add-task__modal *{
     width: 100%;
     font-size: 30px;
+}
+
+
+@media screen and (max-width:1500px) {
+    header .container{
+        flex-direction: column;
+    }
+    .logo{
+        margin-bottom: 30px;
+    }
+    .nickname{
+        margin-top: 30px;
+    }
+}
+@media screen and (max-width:1300px) {
+    .task{
+        flex-direction: column-reverse;
+        position: relative;
+    }
+    .task__actions{
+        width: fit-content;
+    }
+    .action__reject{
+        margin: 0 20px 0 0;
+    }
+    .task__deadline{
+        position: absolute;
+        top: 10px;
+        right: 20px;
+    }
+    .task__name{
+        margin-top: 20px;
+    }
+}
+@media screen and (max-width:1000px) {
+    .logo{
+        width: 400px;
+    }
+    main .container{
+        flex-direction: column;
+        justify-content: start;
+    }
+    .to-do,.late{
+        width: 100%;
+    }
+    .auth-window{
+        width: 90%;
+    }        
+}
+@media screen and (max-width:520px) {
+    .auth__top{
+        font-size: 24px;
+    }
+    .auth-option{
+        padding: 20px;
+    }
 }
