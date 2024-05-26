@@ -18,7 +18,7 @@ function addtask(name,deadline,status,id){
         </div>
         ${status == "active" && days>=0?`
         <div class="task__deadline">
-            До: ${deadline.toLocaleString("ru-RU").split(",")[0]}
+            ${deadline.toLocaleString("ru-RU").split(",")[0]}
         </div>
         <div class="task__actions">
             <img src="img/icons/reject.svg" alt="" class="action__reject">

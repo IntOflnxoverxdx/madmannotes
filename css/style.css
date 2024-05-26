@@ -255,6 +255,7 @@ h2{
     display: flex;
     transition: .3s;
     align-items: center;
+    z-index: 9999;
     justify-content: center;
 }
 #add-task-btn:hover{
@@ -351,7 +352,7 @@ main .container{
 }
 @media screen and (max-width:1000px) {
     .logo{
-        width: 400px;
+        width: 80%;
     }
     main .container{
         flex-direction: column;
